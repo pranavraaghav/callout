@@ -24,14 +24,14 @@ class _LoadingPageState extends State<LoadingPage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
         body: Center(
-          child: Image.asset('assets/images/logo.png', scale: 0.5,),
+          child: Image.asset('assets/images/logo.png', scale: 2,),
         )));
   }
 
   void init() async {
     // Wait 3 seconds
     await new Future.delayed(const Duration(seconds: 3));
-    // Navigator.pushReplacement(context,
-    //     MaterialPageRoute(builder: (context) => LoginPage()));
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => LoginPage()));
   }
 }
