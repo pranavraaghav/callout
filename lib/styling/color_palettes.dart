@@ -1,5 +1,17 @@
 import 'package:flutter/material.dart';
 
+//Used in Home Page
+Color mainBG = Color(0xffEAF0F8);
+Color neutral = Color(0xff8E98A4);
+Color primary = Color(0xff1A6BD6);
+Color active = Color(0xff134B96);
+Color hover = Color(0xff195FBB);
+Color whiteTint = Color(0xffFDFEFF);
+Color cardGray = Color(0xff8E98A4);
+Color textColor = Color(0xff313A46);
+Color accentYellow = Color(0xffFFD700);
+//
+
 Color snow = Color(0xffFCF7F8);
 Color lightGray = Color(0xffCED3DC);
 Color unselectedGray = Color(0xff707070);
@@ -52,8 +64,8 @@ List<Color> bubbles = [
 ];
 
 List<Color> calm = [
-Color(0xffFED9B7),
-Color(0xff8ed4e8),
+  Color(0xffFED9B7),
+  Color(0xff8ed4e8),
 ];
 
 List<Color> spectral = [
@@ -63,7 +75,7 @@ List<Color> spectral = [
   Color(0xff0081A7),
 ];
 
-LinearGradient verticalGradient(List<Color> palette){
+LinearGradient verticalGradient(List<Color> palette) {
   return LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -71,7 +83,7 @@ LinearGradient verticalGradient(List<Color> palette){
   );
 }
 
-LinearGradient horizontalGradient(List<Color> palette){
+LinearGradient horizontalGradient(List<Color> palette) {
   return LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
