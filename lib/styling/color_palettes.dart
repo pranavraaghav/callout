@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// TODO
+// Add colors from figma
+
 Color snow = Color(0xffFCF7F8);
 Color lightGray = Color(0xffCED3DC);
 Color unselectedGray = Color(0xff707070);
@@ -10,6 +13,10 @@ Color sixtyPercOrange = Color(0x96FC8400);
 Color blackCoral = Color(0xff5B616A);
 
 Color loginYellow = Color(0xFFFFD700);
+
+// nav added these from Figma, names are up for debate
+Color neutralGrey = Color(0xFF8E98A4);
+Color textColor = Color(0xFF313A46);
 
 List<Color> calloutBlue = [
   Color(0xff2E86FB),
@@ -52,8 +59,8 @@ List<Color> bubbles = [
 ];
 
 List<Color> calm = [
-Color(0xffFED9B7),
-Color(0xff8ed4e8),
+  Color(0xffFED9B7),
+  Color(0xff8ed4e8),
 ];
 
 List<Color> spectral = [
@@ -63,7 +70,7 @@ List<Color> spectral = [
   Color(0xff0081A7),
 ];
 
-LinearGradient verticalGradient(List<Color> palette){
+LinearGradient verticalGradient(List<Color> palette) {
   return LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -71,7 +78,7 @@ LinearGradient verticalGradient(List<Color> palette){
   );
 }
 
-LinearGradient horizontalGradient(List<Color> palette){
+LinearGradient horizontalGradient(List<Color> palette) {
   return LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
