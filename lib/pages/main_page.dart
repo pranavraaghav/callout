@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:callout/styling/color_palettes.dart';
-import 'package:callout/pages/post_card.dart';
+import 'package:callout/widgets/post_card.dart';
+import 'package:callout/pages/write_post.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -52,24 +53,30 @@ class _MainPageState extends State<MainPage> {
                   color: Colors.white,
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-                  child: Text(
-                    'STARRED POSTS',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
+                  padding: const EdgeInsets.fromLTRB(12, 16, 0, 16),
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      'STARRED POSTS',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-                  child: Text(
-                    'LOGOUT',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
+                  padding: const EdgeInsets.fromLTRB(12, 16, 0, 16),
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      'LOGOUT',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 )
@@ -79,23 +86,59 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       bottomNavigationBar: Container(
-        child: BottomNavigationBar(
-          elevation: 10,
-          iconSize: 30,
-          backgroundColor: whiteTint,
-          selectedItemColor: textColor,
-          unselectedItemColor: textColor,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.location_on_rounded), label: ''),
-            BottomNavigationBarItem(icon: Icon(Icons.edit), label: ''),
-          ],
-        ),
-      ),
+          color: whiteTint,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                  icon: Icon(
+                    Icons.home,
+                    size: 30,
+                    color: textColor,
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => WritePost()));
+                  }),
+              IconButton(
+                  icon: Icon(
+                    Icons.location_on_rounded,
+                    size: 30,
+                    color: textColor,
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => WritePost()));
+                  }),
+              IconButton(
+                  icon: Icon(
+                    Icons.edit,
+                    size: 30,
+                    color: textColor,
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => WritePost()));
+                  })
+            ],
+          )
+          // BottomNavigationBar(
+          //   elevation: 10,
+          //   iconSize: 30,
+          //   backgroundColor: whiteTint,
+          //   selectedItemColor: textColor,
+          //   unselectedItemColor: textColor,
+          //   items: [
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.home),
+          //       label: '',
+          //     ),
+          //     BottomNavigationBarItem(
+          //         icon: Icon(Icons.location_on_rounded), label: ''),
+          //     BottomNavigationBarItem(icon: Icon(Icons.edit), label: ''),
+          //   ],
+          // ),
+          ),
       body: Padding(
         padding: EdgeInsets.all(10),
         child: Column(
@@ -115,9 +158,7 @@ class _MainPageState extends State<MainPage> {
               ],
             ),
             Column(
-              children: [
-                PostCard()
-              ],
+              children: [PostCard()],
             )
           ],
         ),
