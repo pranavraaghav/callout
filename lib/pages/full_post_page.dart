@@ -1,49 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:callout/styling/color_palettes.dart';
-import 'package:callout/widgets/post_card.dart';
 import 'package:callout/pages/write_post.dart';
+import 'package:callout/pages/main_page.dart';
+import 'package:callout/widgets/full_post_card.dart';
+import 'package:callout/widgets/comment_card.dart';
 
-class MainPage extends StatefulWidget {
+class FullPostPage extends StatefulWidget {
   @override
-  _MainPageState createState() => _MainPageState();
+  _FullPostPageState createState() => _FullPostPageState();
 }
 
-class _MainPageState extends State<MainPage> {
-  //For choicechips
-  int _selectedChoiceChip = 2;
-
-  Widget _buildChip(label, id) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectedChoiceChip = id;
-        });
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20))),
-        color: _selectedChoiceChip == id ? primary : cardGray,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
-          child: Text(
-            label,
-            style: TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
-    );
-  }
-
-  //For scroll to top
-  final ScrollController _scrollController = ScrollController();
-
-  void _scrollToTop() {
-    _scrollController.animateTo(0,
-        duration: Duration(seconds: 2), curve: Curves.fastLinearToSlowEaseIn);
-  }
-  //
-
+class _FullPostPageState extends State<FullPostPage> {
   //For the search bar
   final TextEditingController _searchFilter = new TextEditingController();
   String _searchBarText;
@@ -143,9 +110,7 @@ class _MainPageState extends State<MainPage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 0, 16),
                   child: TextButton(
-                    onPressed: () {
-                      //Navigate to Starred Posts
-                    },
+                    onPressed: () {},
                     child: Text(
                       'STARRED POSTS',
                       style: TextStyle(
@@ -159,9 +124,7 @@ class _MainPageState extends State<MainPage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 0, 16),
                   child: TextButton(
-                    onPressed: () {
-                      //Navigate back to Login
-                    },
+                    onPressed: () {},
                     child: Text(
                       'LOGOUT',
                       style: TextStyle(
@@ -189,7 +152,8 @@ class _MainPageState extends State<MainPage> {
                     color: textColor,
                   ),
                   onPressed: () {
-                    _scrollToTop();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MainPage()));
                   }),
               IconButton(
                   icon: Icon(
@@ -214,29 +178,17 @@ class _MainPageState extends State<MainPage> {
             ],
           )),
       body: SingleChildScrollView(
-        controller: _scrollController,
         child: Padding(
           padding: EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildChip('New', 1),
-                  _buildChip('Trending', 2),
-                  _buildChip('Following', 3)
-                ],
-              ),
-              Column(
-                children: [
-                  PostCard(),
-                  PostCard(),
-                  PostCard(),
-                  PostCard(),
-                  PostCard()
-                ],
-              )
-            ],
+          child: Align(
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                FullPostCard(),
+                CommentCard(),
+                CommentCard(),
+              ],
+            ),
           ),
         ),
       ),
