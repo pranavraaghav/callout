@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:callout/styling/color_palettes.dart';
 import 'package:callout/widgets/post_card.dart';
 import 'package:callout/pages/write_post.dart';
+import 'package:callout/pages/full_map_page.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -199,7 +200,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => WritePost()));
+                        MaterialPageRoute(builder: (context) => FullMap()));
                   }),
               IconButton(
                   icon: Icon(
