@@ -1,10 +1,17 @@
+import 'package:callout/models/post.dart';
+import 'package:callout/styling/custom_text_styles.dart';
 import 'package:callout/styling/responsive_size.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:callout/styling/color_palettes.dart';
 import 'package:callout/widgets/post_card_choices.dart';
+import 'package:geocoding/geocoding.dart';
 
 class FullPostCard extends StatefulWidget {
+  final Post post;
+
+  FullPostCard({this.post});
   @override
   _FullPostCardState createState() => _FullPostCardState();
 }
@@ -34,8 +41,48 @@ class _FullPostCardState extends State<FullPostCard> {
     });
   }
 
+  int _currentTimeDiff;
+
+  String _getCurrentTimeDiff() {
+    //Check if at least a day has passed
+    _currentTimeDiff = Timestamp.now()
+        .toDate()
+        .difference(widget.post.createdAt.toDate())
+        .inHours;
+    if (_currentTimeDiff > 24) {
+      return (Timestamp.now()
+              .toDate()
+              .difference(widget.post.createdAt.toDate())
+              .inDays
+              .toString() +
+          'd');
+    } else {
+      return Timestamp.now()
+              .toDate()
+              .difference(widget.post.createdAt.toDate())
+              .inHours
+              .toString() +
+          'h';
+    }
+  }
+
+  String _currentAddress = 'Location';
+
+  Future<String> _getLocationAddress() async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          widget.post.location.latitude, widget.post.location.longitude);
+      setState(() {
+        _currentAddress = placemarks.first.locality;
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    _getLocationAddress();
     //Imports the responsive sizes of whatever screen
     SizeConfig().init(context);
 
@@ -59,7 +106,8 @@ class _FullPostCardState extends State<FullPostCard> {
                   Row(
                     children: [
                       CircleAvatar(
-                        backgroundImage: AssetImage(_userProfileImage),
+                        backgroundImage:
+                            NetworkImage(widget.post.userProfileUrl),
                         radius: 20,
                       ),
                       Padding(
@@ -69,14 +117,8 @@ class _FullPostCardState extends State<FullPostCard> {
                           children: [
                             Row(
                               children: [
-                                Text(
-                                  _userName,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: textColor,
-                                  ),
-                                ),
+                                Text(widget.post.authorName,
+                                    style: buildBoldRobotoText(18, textColor)),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: Icon(
@@ -86,19 +128,14 @@ class _FullPostCardState extends State<FullPostCard> {
                                   ),
                                 ),
                                 Text(
-                                  _postedAt,
+                                  _getCurrentTimeDiff(),
                                   style:
                                       TextStyle(fontSize: 18, color: neutral),
                                 )
                               ],
                             ),
-                            Text(
-                              _postLocation,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: neutral,
-                              ),
-                            )
+                            Text(_currentAddress,
+                                style: buildRobotoTextStyle(14, neutral))
                           ],
                         ),
                       ),
@@ -133,19 +170,11 @@ class _FullPostCardState extends State<FullPostCard> {
                 ],
               ),
               Text(
-                _postTitle,
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+                widget.post.title,
+                style: buildBoldRobotoText(18, Colors.black),
               ),
-              Text(
-                _postDesc,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: textColor,
-                ),
-              ),
+              Text(widget.post.description,
+                  style: buildRobotoTextStyle(11, textColor)),
               Container(
                 padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                 alignment: Alignment.center,
@@ -176,25 +205,15 @@ class _FullPostCardState extends State<FullPostCard> {
                           },
                           color: _isStarred == 0 ? accentYellow : Colors.black,
                         ),
-                        Text(
-                          _stars.toString(),
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: textColor,
-                          ),
-                        ),
+                        Text(_stars.toString(),
+                            style: buildRobotoTextStyle(14, textColor)),
                       ],
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          _comments.toString(),
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: textColor,
-                          ),
-                        ),
+                        Text(_comments.toString(),
+                            style: buildRobotoTextStyle(14, textColor)),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                           child: Icon(

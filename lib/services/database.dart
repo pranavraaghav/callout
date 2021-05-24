@@ -1,0 +1,46 @@
+import 'package:callout/models/post.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+class DatabaseService {
+  final String uid;
+  DatabaseService({this.uid});
+
+  final CollectionReference postsCollection =
+      FirebaseFirestore.instance.collection('posts');
+
+  final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
+
+  Future updateUserData(String displayName, GeoPoint location) async {
+    return await usersCollection.doc(uid).set({
+      'displayName': displayName,
+      'location': location,
+    });
+  }
+
+  List<Post> _postListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return Post(
+        title: doc.get('title') ?? '',
+        authorID: doc.get('authorID') ?? '',
+        createdAt: doc.get('createdAt') ?? Timestamp.now(),
+        location: doc.get('location') ?? GeoPoint(20.5937, 78.9629),
+        description: doc.get('description') ?? '',
+        userProfileUrl: doc.get('userProfileUrl') ?? '',
+        authorName: doc.get('authorName') ?? '',
+        imageUrl: doc.get('imageUrl') ?? '',
+      );
+    }).toList();
+  }
+
+  //Streams are basically a database listener, when the database is updated anything connected to the stream gets updated too
+  Stream<QuerySnapshot> get users {
+    return usersCollection.snapshots();
+  }
+
+  //Set up a stream for the posts collection and formats then according to our post model
+  Stream<List<Post>> get posts {
+    return postsCollection.snapshots().map(_postListFromSnapshot);
+  }
+}

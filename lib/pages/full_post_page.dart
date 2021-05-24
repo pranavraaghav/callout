@@ -1,3 +1,5 @@
+import 'package:callout/models/post.dart';
+import 'package:callout/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:callout/styling/color_palettes.dart';
 import 'package:callout/pages/write_post.dart';
@@ -6,6 +8,8 @@ import 'package:callout/widgets/full_post_card.dart';
 import 'package:callout/widgets/comment_card.dart';
 
 class FullPostPage extends StatefulWidget {
+  final Post post;
+  FullPostPage({this.post});
   @override
   _FullPostPageState createState() => _FullPostPageState();
 }
@@ -83,63 +87,7 @@ class _FullPostPageState extends State<FullPostPage> {
         ],
         backgroundColor: primary,
       ),
-      drawer: Drawer(
-        child: Container(
-          color: primary,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 8, 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextButton(
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                    size: 60,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ButtonStyle(animationDuration: Duration(seconds: 2)),
-                ),
-                Divider(
-                  height: 20,
-                  thickness: 1,
-                  color: Colors.white,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 16, 0, 16),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'STARRED POSTS',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 16, 0, 16),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'LOGOUT',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
+      drawer: DrawerWidget(),
       bottomNavigationBar: Container(
           color: whiteTint,
           child: Row(
@@ -184,7 +132,9 @@ class _FullPostPageState extends State<FullPostPage> {
             alignment: Alignment.center,
             child: Column(
               children: [
-                FullPostCard(),
+                FullPostCard(
+                  post: widget.post,
+                ),
                 CommentCard(),
                 CommentCard(),
               ],

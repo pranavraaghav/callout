@@ -1,23 +1,34 @@
+import 'package:callout/styling/custom_text_styles.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:callout/styling/color_palettes.dart';
 import 'package:callout/styling/responsive_size.dart';
 import 'package:callout/pages/full_post_page.dart';
+import 'package:callout/models/post.dart';
+import 'package:geocoding/geocoding.dart';
+
+//Figure out calcs for Timestamp and Geopoint
 
 class PostCard extends StatefulWidget {
+  final Post post;
+
+  // String userProfileImage = 'assets/images/nav_prof.png';
+  // String userName = 'User';
+  // String postedAt = '9h'; //Funky maths to calculate
+  // String postLocation = 'Location';
+  // String postTitle = 'Title';
+  // String postDesc =
+  //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tincidunt felis nisl, eget blandit magna euismod quis. Suspendisse porta mauris sit amet facilisis interdum. Vestibulum sem erat, dictum ac aliquam eget, efficitur nec mauris.';
+
+  PostCard({this.post});
+
   @override
   _PostCardState createState() => _PostCardState();
 }
 
 class _PostCardState extends State<PostCard> {
   //Static Variables
-  String _userProfileImage = 'assets/images/nav_prof.png';
-  String _userName = 'User';
-  String _postedAt = '9h'; //Funky maths to calculate
-  String _postLocation = 'Location';
-  String _postTitle = 'Title';
-  String _postDesc =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tincidunt felis nisl, eget blandit magna euismod quis. Suspendisse porta mauris sit amet facilisis interdum. Vestibulum sem erat, dictum ac aliquam eget, efficitur nec mauris.';
 
   int _stars = 15;
   int _comments = 2;
@@ -33,15 +44,60 @@ class _PostCardState extends State<PostCard> {
     });
   }
 
+  int _currentTimeDiff;
+
+  String _getCurrentTimeDiff() {
+    //Check if at least a day has passed
+    _currentTimeDiff = Timestamp.now()
+        .toDate()
+        .difference(widget.post.createdAt.toDate())
+        .inHours;
+    if (_currentTimeDiff > 24) {
+      return (Timestamp.now()
+              .toDate()
+              .difference(widget.post.createdAt.toDate())
+              .inDays
+              .toString() +
+          'd');
+    } else {
+      return Timestamp.now()
+              .toDate()
+              .difference(widget.post.createdAt.toDate())
+              .inHours
+              .toString() +
+          'h';
+    }
+  }
+
+  String _currentAddress = 'Location';
+
+  Future<String> _getLocationAddress() async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          widget.post.location.latitude, widget.post.location.longitude);
+      setState(() {
+        _currentAddress = placemarks.first.locality;
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    _getLocationAddress();
+
     //Imports the responsive sizes of whatever screen
     SizeConfig().init(context);
 
     return InkWell(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => FullPostPage()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => FullPostPage(
+                      post: widget.post,
+                    )));
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -62,8 +118,8 @@ class _PostCardState extends State<PostCard> {
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundImage: AssetImage(
-                              _userProfileImage), //Must be Netwrok image for online urls
+                          backgroundImage: NetworkImage(widget.post
+                              .userProfileUrl), //Must be Netwrok image for online urls
                           radius: 20,
                         ),
                         Padding(
@@ -73,14 +129,9 @@ class _PostCardState extends State<PostCard> {
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    _userName,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: textColor,
-                                    ),
-                                  ),
+                                  Text(widget.post.authorName,
+                                      style:
+                                          buildBoldRobotoText(18, textColor)),
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: Icon(
@@ -90,19 +141,13 @@ class _PostCardState extends State<PostCard> {
                                     ),
                                   ),
                                   Text(
-                                    _postedAt,
-                                    style:
-                                        TextStyle(fontSize: 18, color: neutral),
+                                    _getCurrentTimeDiff(),
+                                    style: buildRobotoTextStyle(18, neutral),
                                   )
                                 ],
                               ),
-                              Text(
-                                _postLocation,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: neutral,
-                                ),
-                              )
+                              Text(_currentAddress,
+                                  style: buildRobotoTextStyle(14, neutral))
                             ],
                           ),
                         ),
@@ -137,19 +182,11 @@ class _PostCardState extends State<PostCard> {
                   ],
                 ),
                 Text(
-                  _postTitle,
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                  widget.post.title,
+                  style: buildBoldRobotoText(18, Colors.black),
                 ),
-                Text(
-                  _postDesc,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: textColor,
-                  ),
-                ),
+                Text(widget.post.description,
+                    style: buildRobotoTextStyle(11, textColor)),
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
                   child: Row(
@@ -174,25 +211,15 @@ class _PostCardState extends State<PostCard> {
                             color:
                                 _isStarred == 0 ? accentYellow : Colors.black,
                           ),
-                          Text(
-                            _stars.toString(),
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: textColor,
-                            ),
-                          ),
+                          Text(_stars.toString(),
+                              style: buildRobotoTextStyle(14, textColor)),
                         ],
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            _comments.toString(),
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: textColor,
-                            ),
-                          ),
+                          Text(_comments.toString(),
+                              style: buildRobotoTextStyle(14, textColor)),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                             child: Icon(

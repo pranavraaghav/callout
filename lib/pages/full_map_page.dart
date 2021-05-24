@@ -6,6 +6,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:callout/widgets/bottom_nav_bar.dart';
 
 class FullMap extends StatefulWidget {
+  // final double initialLatitude;
+  // final double initialLongitude;
+
+  // FullMap({this.initialLatitude, this.initialLongitude});
+
   @override
   _FullMapState createState() => _FullMapState();
 }

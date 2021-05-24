@@ -1,6 +1,11 @@
+import 'package:callout/services/auth.dart';
+import 'package:callout/services/storage.dart';
 import 'package:callout/styling/color_palettes.dart';
+import 'package:callout/styling/custom_text_styles.dart';
 import 'package:callout/styling/responsive_size.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -10,6 +15,8 @@ class WritePost extends StatefulWidget {
 }
 
 class _WritePostState extends State<WritePost> {
+  final AuthService _auth = AuthService();
+  //For the image picker
   File _image;
   final imagePicker = ImagePicker();
 
@@ -24,6 +31,17 @@ class _WritePostState extends State<WritePost> {
       }
     });
   }
+
+  //For the form itself
+  final _formkey = GlobalKey<FormState>();
+  bool error = false;
+
+  String title = '';
+  String description = '';
+  GeoPoint location = new GeoPoint(20.5937, 78.9629);
+
+  TextEditingController titleTextController = new TextEditingController();
+  TextEditingController descriptionTextController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +64,12 @@ class _WritePostState extends State<WritePost> {
                   color: primary,
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (_image.existsSync()) {
+                      _uploadImage();
+                    }
+                    ;
+                  },
                   child: Text('Post',
                       style: TextStyle(
                           backgroundColor: primary,
@@ -56,51 +79,16 @@ class _WritePostState extends State<WritePost> {
             )
           ],
         ),
-        body: SingleChildScrollView(
+        body: Form(
+          key: _formkey,
           child: Padding(
             padding: EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Title',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: textColor,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                  child: TextField(
-                    maxLength: 20,
-                    decoration: InputDecoration(
-                      fillColor: whiteTint,
-                      border: OutlineInputBorder(),
-                      labelText: 'Enter Here',
-                    ),
-                  ),
-                ),
-                Text(
-                  'Description',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: textColor,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                  child: TextField(
-                    maxLength: 140,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      fillColor: whiteTint,
-                      border: OutlineInputBorder(),
-                      labelText: 'Enter Here',
-                    ),
-                  ),
-                ),
+                buildTitleTextField(context, 'Title', titleTextController),
+                buildDescriptionTextField(
+                    context, 'Description', descriptionTextController),
                 SizedBox(
                   height: SizeConfig.screenHeight * 0.01,
                 ),
@@ -160,5 +148,90 @@ class _WritePostState extends State<WritePost> {
             ),
           ),
         ));
+  }
+
+  _uploadImage() async {
+    await StorageService().uploadImageToFirebase(context, _image);
+  }
+
+  Widget buildTitleTextField(
+      BuildContext context, String label, TextEditingController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: buildRobotoDrawerTextStyle(24, textColor, FontWeight.bold),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+          child: TextFormField(
+            inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ ]'))],
+            maxLength: 20,
+            controller: controller,
+            onChanged: (value) {
+              setState(() {
+                title = value;
+              });
+            },
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter a valid title';
+              }
+              return null;
+            },
+            showCursor: true,
+            decoration: InputDecoration(
+              fillColor: whiteTint,
+              border: OutlineInputBorder(),
+              labelText: 'Enter Here',
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  createPost() async {
+    //Go thru auth then database
+    //But how to generate unique post id?
+  }
+
+  Widget buildDescriptionTextField(
+      BuildContext context, String label, TextEditingController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: buildRobotoDrawerTextStyle(24, textColor, FontWeight.bold),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+          child: TextFormField(
+            inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ ]'))],
+            maxLength: 20,
+            controller: controller,
+            onChanged: (value) {
+              setState(() {
+                description = value;
+              });
+            },
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter a valid description';
+              }
+              return null;
+            },
+            showCursor: true,
+            decoration: InputDecoration(
+              fillColor: whiteTint,
+              border: OutlineInputBorder(),
+              labelText: 'Enter Here',
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
