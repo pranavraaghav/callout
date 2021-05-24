@@ -61,6 +61,6 @@ class DatabaseService {
 
   //Set up a stream for the posts collection and formats then according to our post model
   Stream<List<Post>> get posts {
-    return postsCollection.snapshots().map(_postListFromSnapshot);
+    return postsCollection.orderBy("createdAt", descending: true).snapshots().map(_postListFromSnapshot);
   }
 }
