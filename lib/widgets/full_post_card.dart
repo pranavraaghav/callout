@@ -27,7 +27,7 @@ class _FullPostCardState extends State<FullPostCard> {
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis tincidunt felis nisl, eget blandit magna euismod quis. Suspendisse porta mauris sit amet facilisis interdum. Vestibulum sem erat, dictum ac aliquam eget, efficitur nec mauris.';
   String _postImage = 'assets/images/nature.jpg';
 
-  int _stars = 15;
+  int _stars = 0;
   int _comments = 2;
   int _isStarred = 0;
   _onStarred(int index) {
@@ -82,6 +82,9 @@ class _FullPostCardState extends State<FullPostCard> {
 
   @override
   Widget build(BuildContext context) {
+
+    _stars = widget.post.starCount;
+
     _getLocationAddress();
     //Imports the responsive sizes of whatever screen
     SizeConfig().init(context);
@@ -178,10 +181,25 @@ class _FullPostCardState extends State<FullPostCard> {
               Container(
                 padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                 alignment: Alignment.center,
-                child: Image(
-                  image: NetworkImage(widget.post.imageUrl),
+                child: SizedBox(
+                  height: 250,
+                  child:Image.network(
+                  widget.post.imageUrl,
+                  fit: BoxFit.fill,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes
+                            : null,
+                      ),
+                    );
+                  },
                 ),
-              ),
+              )),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
                 child: Row(
