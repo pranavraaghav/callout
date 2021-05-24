@@ -19,10 +19,10 @@ class DatabaseService {
     });
   }
 
-  Future createPost(String title, String description, String authorID, GeoPoint location, String authorName, String userProfileUrl) async {
+  Future createPost(String title, String description, String authorID, GeoPoint location, String authorName, String imageUrl) async {
     
     print("Create Post : ");
-    print(title + description + authorID+ location.toString() + authorName+ userProfileUrl);
+    print(title + description + authorID+ location.toString() + authorName+ imageUrl);
     
     //TODO: Remove hard coded value
 
@@ -32,7 +32,7 @@ class DatabaseService {
       'location': location,
       'authorID': authorID,
       'authorName': authorName,
-      'imageUrl':userProfileUrl,
+      'imageUrl': imageUrl,
       'createdAt': Timestamp.now(),
       'userProfileUrl': "https://firebasestorage.googleapis.com/v0/b/callout-314015.appspot.com/o/nav_prof.png?alt=media&token=88ad1e8b-9dfe-459e-84b9-9591c862ea4d",
       'starCount': 1,
@@ -48,6 +48,7 @@ class DatabaseService {
         location: doc.get('location') ?? GeoPoint(20.5937, 78.9629),
         description: doc.get('description') ?? '',
         userProfileUrl: doc.get('userProfileUrl') ?? '',
+        imageUrl: doc.get('imageUrl') ?? '',
         authorName: doc.get('authorName') ?? '',
         starCount: doc.get('starCount') ?? 0, 
       );

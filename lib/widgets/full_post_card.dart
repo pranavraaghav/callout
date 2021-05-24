@@ -179,7 +179,7 @@ class _FullPostCardState extends State<FullPostCard> {
                 padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
                 alignment: Alignment.center,
                 child: Image(
-                  image: AssetImage(_postImage),
+                  image: NetworkImage(widget.post.imageUrl),
                 ),
               ),
               Container(

@@ -158,8 +158,8 @@ class _WritePostState extends State<WritePost> {
         ));
   }
 
-  _uploadImage() async {
-    await StorageService().uploadImageToFirebase(context, _image);
+  Future<String> _uploadImage() async {
+    return StorageService().uploadImageToFirebase(_image, uid+'-'+title);
   }
 
   Widget buildTitleTextField(
@@ -200,9 +200,11 @@ class _WritePostState extends State<WritePost> {
   }
 
   newPost(String title, String description) async {
+    
+    String imageUrl = await _uploadImage();
 
     await DatabaseService().createPost(
-        title, description, uid, location, "Ajay", "" 
+        title, description, uid, location, "Ajay", imageUrl 
     );
     Navigator.pop(context);
   }

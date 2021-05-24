@@ -9,6 +9,7 @@ class Post {
   final String title;
   final Timestamp createdAt;
   final GeoPoint location;
+  final String imageUrl;
   final String userProfileUrl;
   final String description;
   final String authorID;
@@ -18,6 +19,7 @@ class Post {
       {this.title,
       this.createdAt,
       this.location,
+      this.imageUrl,
       this.userProfileUrl,
       this.description,
       this.authorID,
