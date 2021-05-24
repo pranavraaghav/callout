@@ -18,6 +18,9 @@ class _PostCardListState extends State<PostCardList> {
     //   print(post.createdAt.toDate());
     // });
 
+    print("Posts : ");
+    print(posts);
+
     return ListView.builder(
         shrinkWrap: true,
         itemCount: posts.length,

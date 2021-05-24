@@ -1,5 +1,7 @@
+import 'package:callout/models/user.dart';
 import 'package:callout/services/auth.dart';
 import 'package:callout/services/storage.dart';
+import 'package:callout/services/database.dart';
 import 'package:callout/styling/color_palettes.dart';
 import 'package:callout/styling/custom_text_styles.dart';
 import 'package:callout/styling/responsive_size.dart';
@@ -8,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+
+import 'package:provider/provider.dart';
 
 class WritePost extends StatefulWidget {
   @override
@@ -38,6 +42,8 @@ class _WritePostState extends State<WritePost> {
 
   String title = '';
   String description = '';
+  String uid;
+  String authorName;
   GeoPoint location = new GeoPoint(20.5937, 78.9629);
 
   TextEditingController titleTextController = new TextEditingController();
@@ -45,6 +51,11 @@ class _WritePostState extends State<WritePost> {
 
   @override
   Widget build(BuildContext context) {
+
+    final user = Provider.of<CalloutUser>(context);
+    uid = user.uid;
+    authorName = user.displayName;
+
     //Imports the responsive sizes of whatever screen
     SizeConfig().init(context);
 
@@ -65,10 +76,7 @@ class _WritePostState extends State<WritePost> {
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               child: TextButton(
                   onPressed: () {
-                    if (_image.existsSync()) {
-                      _uploadImage();
-                    }
-                    ;
+                    newPost(title, description);
                   },
                   child: Text('Post',
                       style: TextStyle(
@@ -166,7 +174,6 @@ class _WritePostState extends State<WritePost> {
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
           child: TextFormField(
-            inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ ]'))],
             maxLength: 20,
             controller: controller,
             onChanged: (value) {
@@ -192,9 +199,12 @@ class _WritePostState extends State<WritePost> {
     );
   }
 
-  createPost() async {
-    //Go thru auth then database
-    //But how to generate unique post id?
+  newPost(String title, String description) async {
+
+    await DatabaseService().createPost(
+        title, description, uid, location, "Ajay", "" 
+    );
+    Navigator.pop(context);
   }
 
   Widget buildDescriptionTextField(
@@ -209,8 +219,7 @@ class _WritePostState extends State<WritePost> {
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
           child: TextFormField(
-            inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ ]'))],
-            maxLength: 20,
+            maxLength: 140,
             controller: controller,
             onChanged: (value) {
               setState(() {

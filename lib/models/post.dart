@@ -13,7 +13,7 @@ class Post {
   final String description;
   final String authorID;
   final String authorName;
-  final String imageUrl;
+  final int starCount;
   Post(
       {this.title,
       this.createdAt,
@@ -22,5 +22,5 @@ class Post {
       this.description,
       this.authorID,
       this.authorName,
-      this.imageUrl});
+      this.starCount});
 }

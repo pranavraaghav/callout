@@ -19,6 +19,26 @@ class DatabaseService {
     });
   }
 
+  Future createPost(String title, String description, String authorID, GeoPoint location, String authorName, String userProfileUrl) async {
+    
+    print("Create Post : ");
+    print(title + description + authorID+ location.toString() + authorName+ userProfileUrl);
+    
+    //TODO: Remove hard coded value
+
+    return await postsCollection.add({
+      'title': title,
+      'description' : description,
+      'location': location,
+      'authorID': authorID,
+      'authorName': authorName,
+      'imageUrl':userProfileUrl,
+      'createdAt': Timestamp.now(),
+      'userProfileUrl': "https://firebasestorage.googleapis.com/v0/b/callout-314015.appspot.com/o/nav_prof.png?alt=media&token=88ad1e8b-9dfe-459e-84b9-9591c862ea4d",
+      'starCount': 1,
+    });
+  }
+
   List<Post> _postListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Post(
@@ -29,7 +49,7 @@ class DatabaseService {
         description: doc.get('description') ?? '',
         userProfileUrl: doc.get('userProfileUrl') ?? '',
         authorName: doc.get('authorName') ?? '',
-        imageUrl: doc.get('imageUrl') ?? '',
+        starCount: doc.get('starCount') ?? 0, 
       );
     }).toList();
   }
