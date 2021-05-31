@@ -19,7 +19,6 @@ class WritePost extends StatefulWidget {
 }
 
 class _WritePostState extends State<WritePost> {
-  final AuthService _auth = AuthService();
   //For the image picker
   File _image;
   final imagePicker = ImagePicker();
@@ -51,7 +50,6 @@ class _WritePostState extends State<WritePost> {
 
   @override
   Widget build(BuildContext context) {
-
     final user = Provider.of<CalloutUser>(context);
     uid = user.uid;
     authorName = user.displayName;
@@ -87,79 +85,81 @@ class _WritePostState extends State<WritePost> {
             )
           ],
         ),
-        body: Form(
-          key: _formkey,
-          child: Padding(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildTitleTextField(context, 'Title', titleTextController),
-                buildDescriptionTextField(
-                    context, 'Description', descriptionTextController),
-                SizedBox(
-                  height: SizeConfig.screenHeight * 0.01,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: neutral),
-                      borderRadius: BorderRadius.all(Radius.circular(16))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.photo_outlined),
-                        onPressed: () {
-                          getImage();
-                        },
-                        iconSize: 30,
-                        color: neutral,
-                      ),
-                      Container(
-                        width: 1,
-                        height: 40,
-                        color: neutral,
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.location_on_outlined),
-                        onPressed: () {},
-                        iconSize: 30,
-                        color: neutral,
-                      ),
-                      Container(
-                        width: 1,
-                        height: 40,
-                        color: neutral,
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.subject_outlined),
-                        onPressed: () {},
-                        iconSize: 30,
-                        color: neutral,
-                      )
-                    ],
+        body: SingleChildScrollView(
+          child: Form(
+            key: _formkey,
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildTitleTextField(context, 'Title', titleTextController),
+                  buildDescriptionTextField(
+                      context, 'Description', descriptionTextController),
+                  SizedBox(
+                    height: SizeConfig.screenHeight * 0.01,
                   ),
-                ),
-                SizedBox(
-                  height: SizeConfig.screenHeight * 0.01,
-                ),
-                Container(
+                  Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: neutral),
                         borderRadius: BorderRadius.all(Radius.circular(16))),
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                    alignment: Alignment.center,
-                    child: _image == null
-                        ? Text('No Image Selected')
-                        : Image.file(_image))
-              ],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.photo_outlined),
+                          onPressed: () {
+                            getImage();
+                          },
+                          iconSize: 30,
+                          color: neutral,
+                        ),
+                        Container(
+                          width: 1,
+                          height: 40,
+                          color: neutral,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.location_on_outlined),
+                          onPressed: () {},
+                          iconSize: 30,
+                          color: neutral,
+                        ),
+                        Container(
+                          width: 1,
+                          height: 40,
+                          color: neutral,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.subject_outlined),
+                          onPressed: () {},
+                          iconSize: 30,
+                          color: neutral,
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: SizeConfig.screenHeight * 0.01,
+                  ),
+                  Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: neutral),
+                          borderRadius: BorderRadius.all(Radius.circular(16))),
+                      padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                      alignment: Alignment.center,
+                      child: _image == null
+                          ? Text('No Image Selected')
+                          : Image.file(_image))
+                ],
+              ),
             ),
           ),
         ));
   }
 
   Future<String> _uploadImage() async {
-    return StorageService().uploadImageToFirebase(_image, uid+'-'+title);
+    return StorageService().uploadImageToFirebase(_image, uid + '-' + title);
   }
 
   Widget buildTitleTextField(
@@ -200,12 +200,10 @@ class _WritePostState extends State<WritePost> {
   }
 
   newPost(String title, String description) async {
-    
     String imageUrl = await _uploadImage();
 
-    await DatabaseService().createPost(
-        title, description, uid, location, "Ajay", imageUrl 
-    );
+    await DatabaseService()
+        .createPost(title, description, uid, location, "Ajay", imageUrl);
     Navigator.pop(context);
   }
 

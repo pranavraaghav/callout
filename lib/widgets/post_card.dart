@@ -59,13 +59,24 @@ class _PostCardState extends State<PostCard> {
               .inDays
               .toString() +
           'd');
-    } else {
+    } else if (Timestamp.now()
+            .toDate()
+            .difference(widget.post.createdAt.toDate())
+            .inMinutes >
+        60) {
       return Timestamp.now()
               .toDate()
               .difference(widget.post.createdAt.toDate())
               .inHours
               .toString() +
           'h';
+    } else {
+      return Timestamp.now()
+              .toDate()
+              .difference(widget.post.createdAt.toDate())
+              .inMinutes
+              .toString() +
+          'min';
     }
   }
 

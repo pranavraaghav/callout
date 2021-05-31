@@ -36,131 +36,104 @@ class _LoginPageState extends State<LoginPage> {
   void _onCheck(bool value) => setState(() => {_obscureText = !value});
 
   Widget build(BuildContext context) {
-    return isLoading
-        ? LoadingPage()
-        : Container(
-            decoration: BoxDecoration(
-              gradient: verticalGradient(calloutBlue),
-            ),
-            child: Scaffold(
-                resizeToAvoidBottomInset: false,
-                backgroundColor: Colors.transparent,
-                body: Center(
-                    child: SizedBox(
-                        width: 240,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // TITLE
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                margin: const EdgeInsets.only(bottom: 40.0),
-                                child: Text(
-                                  "LOG IN",
-                                  style:
-                                      buildRobotoTextStyle(30.0, Colors.white),
-                                ),
-                              ),
+    return Container(
+        decoration: BoxDecoration(
+          gradient: verticalGradient(calloutBlue),
+        ),
+        child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: Colors.transparent,
+            body: Center(
+                child: SizedBox(
+                    width: 240,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // TITLE
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: const EdgeInsets.only(bottom: 40.0),
+                            child: Text(
+                              "LOG IN",
+                              style: buildRobotoTextStyle(30.0, Colors.white),
+                            ),
+                          ),
 
-                              Form(
-                                  key: _formKey,
-                                  child: Column(children: [
-                                    buildTextField(
-                                        context,
-                                        "Email ID",
-                                        emailIDTextController,
-                                        _obscureText,
-                                        true),
-                                    buildTextField(
-                                        context,
-                                        "Password",
-                                        passwordTextController,
-                                        _obscureText,
-                                        false),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    // checkbox to show password
-                                    buildCheckBoxColumn(context, _obscureText,
-                                        _onCheck, 'Show password'),
-                                  ])),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                errorString,
-                                style: buildRobotoTextStyle(16, Colors.red),
-                              ),
-                              Container(
-                                width: 175.0,
-                                height: 48.0,
-                                margin: const EdgeInsets.only(
-                                    top: 30.0, bottom: 7.50),
-                                child: RaisedButton(
-                                  color: loginYellow,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(100.0))),
-                                  textColor: Colors.white,
-                                  onPressed: () {
-                                    // Validate returns true if the form is valid, otherwise false.
-                                    if (_formKey.currentState.validate()) {
-                                      logIn();
-                                    }
-                                  },
-                                  child: Text(
-                                    "LOG IN",
-                                    style: buildRobotoTextStyle(
-                                        14.0, Colors.black),
-                                  ),
+                          Form(
+                              key: _formKey,
+                              child: Column(children: [
+                                buildTextField(context, "Email ID",
+                                    emailIDTextController, _obscureText, true),
+                                buildTextField(
+                                    context,
+                                    "Password",
+                                    passwordTextController,
+                                    _obscureText,
+                                    false),
+                                SizedBox(
+                                  height: 5,
                                 ),
+                                // checkbox to show password
+                                buildCheckBoxColumn(context, _obscureText,
+                                    _onCheck, 'Show password'),
+                              ])),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            errorString,
+                            style: buildRobotoTextStyle(16, Colors.red),
+                          ),
+                          Container(
+                            width: 175.0,
+                            height: 48.0,
+                            margin:
+                                const EdgeInsets.only(top: 30.0, bottom: 7.50),
+                            child: RaisedButton(
+                              color: loginYellow,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(100.0))),
+                              textColor: Colors.white,
+                              onPressed: () {
+                                // Validate returns true if the form is valid, otherwise false.
+                                if (_formKey.currentState.validate()) {
+                                  logIn();
+                                }
+                              },
+                              child: Text(
+                                "LOG IN",
+                                style: buildRobotoTextStyle(14.0, Colors.black),
                               ),
+                            ),
+                          ),
 
-                              Container(
-                                width: 175.0,
-                                height: 48.0,
-                                margin: const EdgeInsets.only(
-                                    top: 7.50, bottom: 30.0),
-                                child: FlatButton(
-                                  color: Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Colors.white, width: 2),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(100.0))),
-                                  textColor: Colors.white,
-                                  onPressed: () {
-                                    // Validate returns true if the form is valid, otherwise false.
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SignUpPage()));
-                                  },
-                                  child: Text(
-                                    "Sign Up",
-                                    style: buildRobotoTextStyle(
-                                        14.0, Colors.white),
-                                  ),
-                                ),
+                          Container(
+                            width: 175.0,
+                            height: 48.0,
+                            margin:
+                                const EdgeInsets.only(top: 7.50, bottom: 30.0),
+                            child: FlatButton(
+                              color: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                  side:
+                                      BorderSide(color: Colors.white, width: 2),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(100.0))),
+                              textColor: Colors.white,
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SignUpPage()));
+                              },
+                              child: Text(
+                                "Sign Up",
+                                style: buildRobotoTextStyle(14.0, Colors.white),
                               ),
-
-                              Container(
-                                padding: EdgeInsets.only(top: 0.0),
-                                child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        register();
-                                      });
-                                    },
-                                    child: Text(
-                                      'Forgot Password?',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          decoration: TextDecoration.underline),
-                                    )),
-                              )
-                            ])))));
+                            ),
+                          ),
+                        ])))));
   }
 
   logIn() async {

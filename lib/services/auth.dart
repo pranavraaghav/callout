@@ -16,15 +16,25 @@ class AuthService {
             uid: user.uid,
             displayName: user.displayName,
             email: user.email,
-            photoURL: user.photoURL)
+            photoURL: user.photoURL,
+          )
         : null;
   }
 
   //auth change user stream
+  // Stream<CalloutUser> get user {
+  //   return _auth
+  //       .authStateChanges()
+  //       .map((User user) => _userFromFirebaseUser(user));
+  // }
   Stream<CalloutUser> get user {
     return _auth
         .authStateChanges()
         .map((User user) => _userFromFirebaseUser(user));
+  }
+
+  Future<CalloutUser> get userA {
+    return _auth.authStateChanges().first.then(_userFromFirebaseUser);
   }
 
   Future signInAnon() async {
@@ -59,7 +69,7 @@ class AuthService {
       User user = result.user;
 
       await DatabaseService(uid: user.uid)
-          .updateUserData(displayName, GeoPoint(20.5937, 78.9629));
+          .updateUserData(email, displayName, GeoPoint(20.5937, 78.9629));
 
       return _userFromFirebaseUser(user);
     } catch (e) {
@@ -69,7 +79,9 @@ class AuthService {
   }
 
   Future getUserDetails() async {
-    return _auth.currentUser.email;
+    CalloutUser user;
+
+    return _auth.currentUser.displayName;
   }
 
   Future signOut() async {

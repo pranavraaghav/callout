@@ -1,4 +1,7 @@
 import 'package:callout/models/post.dart';
+import 'package:callout/pages/write_commnet.dart';
+import 'package:callout/styling/custom_text_styles.dart';
+import 'package:callout/styling/responsive_size.dart';
 import 'package:callout/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:callout/styling/color_palettes.dart';
@@ -70,6 +73,8 @@ class _FullPostPageState extends State<FullPostPage> {
   //
   @override
   Widget build(BuildContext context) {
+    //Imports the responsive sizes of whatever screen
+    SizeConfig().init(context);
     return Scaffold(
       backgroundColor: mainBG,
       appBar: AppBar(
@@ -134,6 +139,31 @@ class _FullPostPageState extends State<FullPostPage> {
               children: [
                 FullPostCard(
                   post: widget.post,
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WriteComment(
+                                  post: widget.post,
+                                )));
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: SizeConfig.screenWidth * 0.8,
+                      height: SizeConfig.screenHeight * 0.05,
+                      decoration: BoxDecoration(
+                          color: whiteTint,
+                          borderRadius: BorderRadius.circular(11)),
+                      child: Text(
+                        'Comment on this',
+                        style: buildBoldRobotoText(18, textColor),
+                      ),
+                    ),
+                  ),
                 ),
                 CommentCard(),
                 CommentCard(),

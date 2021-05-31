@@ -82,7 +82,6 @@ class _FullPostCardState extends State<FullPostCard> {
 
   @override
   Widget build(BuildContext context) {
-
     _stars = widget.post.starCount;
 
     _getLocationAddress();
@@ -179,27 +178,27 @@ class _FullPostCardState extends State<FullPostCard> {
               Text(widget.post.description,
                   style: buildRobotoTextStyle(11, textColor)),
               Container(
-                padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                alignment: Alignment.center,
-                child: SizedBox(
-                  height: 250,
-                  child:Image.network(
-                  widget.post.imageUrl,
-                  fit: BoxFit.fill,
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes
-                            : null,
-                      ),
-                    );
-                  },
-                ),
-              )),
+                  padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    height: 200,
+                    child: Image.network(
+                      widget.post.imageUrl,
+                      fit: BoxFit.fill,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
+                  )),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
                 child: Row(

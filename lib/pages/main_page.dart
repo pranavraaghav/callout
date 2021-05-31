@@ -38,6 +38,9 @@ class _MainPageState extends State<MainPage> {
   //For Auth stuffs
   final AuthService _auth = AuthService();
 
+  //For ordering posts
+  Stream<List<Post>> streamValue = DatabaseService().posts;
+
   //For choicechips
   int _selectedChoiceChip = 2;
 
@@ -129,7 +132,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Post>>.value(
-      value: DatabaseService().posts,
+      value: streamValue,
       child: Scaffold(
         backgroundColor: mainBG,
         appBar: AppBar(
