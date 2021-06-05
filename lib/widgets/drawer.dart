@@ -68,17 +68,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       thickness: 1,
                       color: Colors.white,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 8, 0, 8),
-                      child: TextButton(
-                        onPressed: () {
-                          //Navigate to Starred Posts
-                        },
-                        child: Text('STARRED POSTS',
-                            style: buildRobotoDrawerTextStyle(
-                                20, Colors.white, FontWeight.bold)),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.fromLTRB(12, 8, 0, 8),
+                    //   child: TextButton(
+                    //     onPressed: () {
+                    //       //Navigate to Starred Posts
+                    //     },
+                    //     child: Text('STARRED POSTS',
+                    //         style: buildRobotoDrawerTextStyle(
+                    //             20, Colors.white, FontWeight.bold)),
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(12, 8, 0, 8),
                       child: TextButton(

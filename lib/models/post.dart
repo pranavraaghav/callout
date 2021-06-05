@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //3. Obviously check in /widgets/post_card.dart to make sure it gets used right
 
 class Post {
+  final String postID;
   final String title;
   final Timestamp createdAt;
   final GeoPoint location;
@@ -16,7 +17,8 @@ class Post {
   final String authorName;
   final int starCount;
   Post(
-      {this.title,
+      {this.postID,
+      this.title,
       this.createdAt,
       this.location,
       this.imageUrl,

@@ -20,13 +20,14 @@ class WriteComment extends StatefulWidget {
 class _WriteCommentState extends State<WriteComment> {
   final _formkey = GlobalKey<FormState>();
   bool error = false;
-
+  String uid;
   String comment = '';
   TextEditingController commentTextController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<CalloutUser>(context);
+    uid = user.uid;
     //Imports the responsive sizes of whatever screen
     SizeConfig().init(context);
     return Scaffold(
@@ -95,7 +96,9 @@ class _WriteCommentState extends State<WriteComment> {
                 Icons.send,
                 color: neutral,
               ),
-              onPressed: () {},
+              onPressed: () {
+                newComment(widget.post.postID, uid, comment, widget.post.title);
+              },
             )
           ],
         ),
@@ -125,5 +128,11 @@ class _WriteCommentState extends State<WriteComment> {
         )
       ],
     );
+  }
+
+  newComment(
+      String postID, String authorID, String comment, String title) async {
+    await DatabaseService().createComment(postID, authorID, comment, title);
+    Navigator.pop(context);
   }
 }

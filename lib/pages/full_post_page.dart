@@ -1,5 +1,5 @@
 import 'package:callout/models/post.dart';
-import 'package:callout/pages/write_commnet.dart';
+import 'package:callout/pages/write_comment.dart';
 import 'package:callout/styling/custom_text_styles.dart';
 import 'package:callout/styling/responsive_size.dart';
 import 'package:callout/widgets/drawer.dart';

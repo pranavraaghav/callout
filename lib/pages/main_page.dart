@@ -12,6 +12,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:callout/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geodesy/geodesy.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -21,6 +22,15 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   //For User Location
   Position _currentPositon;
+  bool _locationLoaded = false;
+  _goToFullMap() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => FullMap(
+                  currentPosition: _currentPositon,
+                )));
+  }
 
   _getCurrentLocation() {
     Geolocator.getCurrentPosition(
@@ -29,7 +39,11 @@ class _MainPageState extends State<MainPage> {
         .then((Position position) {
       setState(() {
         _currentPositon = position;
+        _locationLoaded = true;
+        // print("Getting Location:");
+        // print(_currentPositon);
       });
+      _goToFullMap();
     }).catchError((e) {
       print(e);
     });
@@ -42,13 +56,14 @@ class _MainPageState extends State<MainPage> {
   Stream<List<Post>> streamValue = DatabaseService().posts;
 
   //For choicechips
-  int _selectedChoiceChip = 2;
+  int _selectedChoiceChip = 1;
 
-  Widget _buildChip(label, id) {
+  Widget _buildChip(String label, int id, Stream<List<Post>> stream) {
     return InkWell(
       onTap: () {
         setState(() {
           _selectedChoiceChip = id;
+          streamValue = stream;
         });
       },
       child: Card(
@@ -131,7 +146,14 @@ class _MainPageState extends State<MainPage> {
   //
   @override
   Widget build(BuildContext context) {
+    // _getCurrentLocation();
+    // Geodesy geodesy = Geodesy();
+    // num distance = geodesy.distanceBetweenTwoGeoPoints(
+    //     LatLng(_currentPositon.latitude, _currentPositon.longitude),
+    //     LatLng(20.59, 78.96));
+    // print(distance);
     return StreamProvider<List<Post>>.value(
+      initialData: [],
       value: streamValue,
       child: Scaffold(
         backgroundColor: mainBG,
@@ -172,10 +194,7 @@ class _MainPageState extends State<MainPage> {
                       color: textColor,
                     ),
                     onPressed: () async {
-                      // _getCurrentLocation();
-                      // print(_currentPositon);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => FullMap()));
+                      _getCurrentLocation();
                     }),
                 IconButton(
                     icon: Icon(
@@ -198,9 +217,10 @@ class _MainPageState extends State<MainPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildChip('New', 1),
-                    _buildChip('Trending', 2),
-                    _buildChip('Following', 3)
+                    _buildChip('New', 1, DatabaseService().posts),
+                    _buildChip('Trending', 2, DatabaseService().postsByStars),
+                    _buildChip(
+                        'Following', 3, DatabaseService().postsByLocation)
                   ],
                 ),
                 PostCardList(),

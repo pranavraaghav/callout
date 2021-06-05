@@ -1,3 +1,4 @@
+import 'package:callout/models/comment.dart';
 import 'package:callout/models/post.dart';
 import 'package:callout/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,8 +14,12 @@ class DatabaseService {
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('users');
 
-  Future getUserDoc() async {
-    return await usersCollection.doc(uid).get();
+  final CollectionReference commentsCollection =
+      FirebaseFirestore.instance.collection('comments');
+
+  Future<CalloutUser> getUserDoc() async {
+    var userDoc = await usersCollection.doc(uid).get();
+    return CalloutUser.fromSnapshot(userDoc);
   }
 
   Future updateUserData(
@@ -54,6 +59,17 @@ class DatabaseService {
     });
   }
 
+  Future createComment(
+      String postID, String authorID, String comment, String title) async {
+    List<Comment> comments;
+
+    return await commentsCollection.doc(postID).set({
+      'authorID': authorID,
+      'comment': comment,
+      'createdAt': Timestamp.now(),
+    });
+  }
+
   CalloutUser _calloutUserFromSnapShot(DocumentSnapshot snapshot) {
     return CalloutUser(
       uid: uid,
@@ -67,6 +83,7 @@ class DatabaseService {
   List<Post> _postListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return Post(
+        postID: doc.id,
         title: doc.get('title') ?? '',
         authorID: doc.get('authorID') ?? '',
         createdAt: doc.get('createdAt') ?? Timestamp.now(),
@@ -90,6 +107,10 @@ class DatabaseService {
     return usersCollection.doc(uid).snapshots().map(_calloutUserFromSnapShot);
   }
 
+  // CalloutUser getUserByUid {
+  //   return usersCollection.doc(uid).get().then((value) => null);
+  // }
+
   //Set up a stream for the posts collection and formats then according to our post model
   Stream<List<Post>> get posts {
     return postsCollection
@@ -101,6 +122,13 @@ class DatabaseService {
   Stream<List<Post>> get postsByStars {
     return postsCollection
         .orderBy("starCount", descending: true)
+        .snapshots()
+        .map(_postListFromSnapshot);
+  }
+
+  Stream<List<Post>> get postsByLocation {
+    return postsCollection
+        .orderBy("location", descending: true)
         .snapshots()
         .map(_postListFromSnapshot);
   }

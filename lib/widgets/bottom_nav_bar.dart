@@ -3,11 +3,15 @@ import 'package:callout/styling/color_palettes.dart';
 import 'package:callout/pages/full_map_page.dart';
 import 'package:callout/pages/write_post.dart';
 import 'package:callout/pages/main_page.dart';
+import 'package:geolocator/geolocator.dart';
 
 class BottomNavBar extends StatefulWidget {
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
 }
+
+//NOTE : MainPage uses its own Bottom Nav Bar
+//due to the fact that tapping home should only scroll to top rather than push anothe MainPage on top of it
 
 class _BottomNavBarState extends State<BottomNavBar> {
   //For scroll to top
@@ -16,6 +20,21 @@ class _BottomNavBarState extends State<BottomNavBar> {
   void _scrollToTop() {
     _scrollController.animateTo(0,
         duration: Duration(seconds: 2), curve: Curves.fastLinearToSlowEaseIn);
+  }
+
+  Position _currentPositon;
+
+  _getCurrentLocation() {
+    Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.best,
+            forceAndroidLocationManager: true)
+        .then((Position position) {
+      setState(() {
+        _currentPositon = position;
+      });
+    }).catchError((e) {
+      print(e);
+    });
   }
 
   //
@@ -43,6 +62,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   color: textColor,
                 ),
                 onPressed: () {
+                  print(_currentPositon);
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => FullMap()));
                 }),
