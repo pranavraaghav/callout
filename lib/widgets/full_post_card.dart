@@ -28,7 +28,7 @@ class _FullPostCardState extends State<FullPostCard> {
   String _postImage = 'assets/images/nature.jpg';
 
   int _stars = 0;
-  int _comments = 2;
+  int _comments = 0;
   int _isStarred = 0;
   _onStarred(int index) {
     setState(() {
@@ -94,7 +94,7 @@ class _FullPostCardState extends State<FullPostCard> {
   @override
   Widget build(BuildContext context) {
     _stars = widget.post.starCount;
-
+    _comments = widget.post.comments.length;
     _getLocationAddress();
     //Imports the responsive sizes of whatever screen
     SizeConfig().init(context);

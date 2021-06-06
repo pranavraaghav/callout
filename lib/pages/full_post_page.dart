@@ -1,7 +1,11 @@
+import 'package:callout/models/comment.dart';
 import 'package:callout/models/post.dart';
 import 'package:callout/pages/write_comment.dart';
+import 'package:callout/services/database.dart';
 import 'package:callout/styling/custom_text_styles.dart';
 import 'package:callout/styling/responsive_size.dart';
+import 'package:callout/widgets/bottom_nav_bar.dart';
+import 'package:callout/widgets/comment_card_list.dart';
 import 'package:callout/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:callout/styling/color_palettes.dart';
@@ -9,6 +13,7 @@ import 'package:callout/pages/write_post.dart';
 import 'package:callout/pages/main_page.dart';
 import 'package:callout/widgets/full_post_card.dart';
 import 'package:callout/widgets/comment_card.dart';
+import 'package:provider/provider.dart';
 
 class FullPostPage extends StatefulWidget {
   final Post post;
@@ -75,6 +80,7 @@ class _FullPostPageState extends State<FullPostPage> {
   Widget build(BuildContext context) {
     //Imports the responsive sizes of whatever screen
     SizeConfig().init(context);
+
     return Scaffold(
       backgroundColor: mainBG,
       appBar: AppBar(
@@ -93,43 +99,7 @@ class _FullPostPageState extends State<FullPostPage> {
         backgroundColor: primary,
       ),
       drawer: DrawerWidget(),
-      bottomNavigationBar: Container(
-          color: whiteTint,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                  icon: Icon(
-                    Icons.home,
-                    size: 30,
-                    color: textColor,
-                  ),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MainPage()));
-                  }),
-              IconButton(
-                  icon: Icon(
-                    Icons.location_on_rounded,
-                    size: 30,
-                    color: textColor,
-                  ),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => WritePost()));
-                  }),
-              IconButton(
-                  icon: Icon(
-                    Icons.edit,
-                    size: 30,
-                    color: textColor,
-                  ),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => WritePost()));
-                  })
-            ],
-          )),
+      bottomNavigationBar: BottomNavBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(10),
@@ -165,13 +135,25 @@ class _FullPostPageState extends State<FullPostPage> {
                     ),
                   ),
                 ),
-                CommentCard(),
-                CommentCard(),
+                CommentCardList(
+                  comments: widget.post.comments,
+                )
+                // CommentCard(),
+                // CommentCard(),
+                // CommentCardList(
+                //   comments: widget.post.comments.map((comment) {
+                //     Comment(
+                //         authorID: comment.authorID,
+                //         comment: comment.comment,
+                //         createdAt: comment.createdAt);
+                //   }).toList(),
+                // )
               ],
             ),
           ),
         ),
       ),
     );
+    ;
   }
 }

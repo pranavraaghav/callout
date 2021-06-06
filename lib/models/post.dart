@@ -1,3 +1,4 @@
+import 'package:callout/models/comment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 //When you want to change these fields
@@ -16,6 +17,7 @@ class Post {
   final String authorID;
   final String authorName;
   final int starCount;
+  final List<Comment> comments;
   Post(
       {this.postID,
       this.title,
@@ -26,5 +28,6 @@ class Post {
       this.description,
       this.authorID,
       this.authorName,
-      this.starCount});
+      this.starCount,
+      this.comments});
 }

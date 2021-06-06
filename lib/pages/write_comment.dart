@@ -132,7 +132,7 @@ class _WriteCommentState extends State<WriteComment> {
 
   newComment(
       String postID, String authorID, String comment, String title) async {
-    await DatabaseService().createComment(postID, authorID, comment, title);
+    await DatabaseService().addComment(postID, authorID, comment, title);
     Navigator.pop(context);
   }
 }

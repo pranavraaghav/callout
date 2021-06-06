@@ -22,6 +22,24 @@ class DatabaseService {
     return CalloutUser.fromSnapshot(userDoc);
   }
 
+  Future<CalloutUser> getUserDocByUID({uid}) async {
+    var userDoc = await usersCollection.doc(uid).get();
+    return CalloutUser.fromSnapshot(userDoc);
+  }
+
+  Future<List<Comment>> getCommentsByPostID({uid}) async {
+    List<Comment> comments;
+
+    commentsCollection.doc(uid).get().then((value) {
+      List.from(value.get('comments')).forEach((element) {
+        //print(element);
+        comments.add(element);
+      });
+    });
+
+    return comments;
+  }
+
   Future updateUserData(
       String email, String displayName, GeoPoint location) async {
     return await usersCollection.doc(uid).set({
@@ -56,18 +74,19 @@ class DatabaseService {
       'userProfileUrl':
           "https://firebasestorage.googleapis.com/v0/b/callout-314015.appspot.com/o/nav_prof.png?alt=media&token=88ad1e8b-9dfe-459e-84b9-9591c862ea4d",
       'starCount': 1,
+      'comments': [],
     });
   }
 
-  Future createComment(
+  Future addComment(
       String postID, String authorID, String comment, String title) async {
-    List<Comment> comments;
-
-    return await commentsCollection.doc(postID).set({
-      'authorID': authorID,
-      'comment': comment,
-      'createdAt': Timestamp.now(),
-    });
+    //List<Comment> comments;
+    var list = [
+      {'authorID': authorID, 'comment': comment, 'createdAt': Timestamp.now()}
+    ];
+    return await postsCollection
+        .doc(postID)
+        .update({"comments": FieldValue.arrayUnion(list)});
   }
 
   CalloutUser _calloutUserFromSnapShot(DocumentSnapshot snapshot) {
@@ -80,8 +99,24 @@ class DatabaseService {
     );
   }
 
+  Comment _commentFromSnapshot(DocumentSnapshot snapshot) {
+    return Comment(
+        authorID: snapshot.get('authorID') ?? null,
+        comment: snapshot.get('comment') ?? '',
+        createdAt: snapshot.get('createdAt') ?? Timestamp.now());
+  }
+
   List<Post> _postListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
+      List<Comment> comments = [];
+      List<dynamic> commentsMap = doc.get('comments');
+      commentsMap.forEach((comment) {
+        comments.add(new Comment(
+            authorID: comment['authorID'],
+            comment: comment['comment'],
+            createdAt: comment['createdAt']));
+      });
+
       return Post(
         postID: doc.id,
         title: doc.get('title') ?? '',
@@ -93,6 +128,7 @@ class DatabaseService {
         imageUrl: doc.get('imageUrl') ?? '',
         authorName: doc.get('authorName') ?? '',
         starCount: doc.get('starCount') ?? 0,
+        comments: comments ?? [],
       );
     }).toList();
   }
@@ -103,8 +139,18 @@ class DatabaseService {
   }
 
   Stream<CalloutUser> get userByUid {
-    print(usersCollection.doc(uid).snapshots().map(_calloutUserFromSnapShot));
+    //print(usersCollection.doc(uid).snapshots().map(_calloutUserFromSnapShot));
     return usersCollection.doc(uid).snapshots().map(_calloutUserFromSnapShot);
+  }
+
+  Stream<Comment> get commentByPostID {
+    print(commentsCollection.doc(uid).get().then((value) {
+      List.from(value.get('comments')).forEach((element) {
+        print(element);
+      });
+    }));
+    // return commentsCollection.doc(uid).snapshots().map(_commentFromSnapshot);
+    return commentsCollection.doc(uid).snapshots().map(_commentFromSnapshot);
   }
 
   // CalloutUser getUserByUid {

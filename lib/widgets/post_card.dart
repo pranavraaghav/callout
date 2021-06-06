@@ -31,7 +31,7 @@ class _PostCardState extends State<PostCard> {
   //Static Variables
 
   int _stars;
-  int _comments = 2;
+  int _comments = 0;
   int _isStarred = 0;
   _onStarred(int index) {
     setState(() {
@@ -98,6 +98,7 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     _getLocationAddress();
 
+    _comments = widget.post.comments.length;
     _stars = widget.post.starCount;
 
     //Imports the responsive sizes of whatever screen

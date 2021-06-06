@@ -22,7 +22,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
         duration: Duration(seconds: 2), curve: Curves.fastLinearToSlowEaseIn);
   }
 
+  //For User Location
   Position _currentPositon;
+  bool _locationLoaded = false;
+  _goToFullMap() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => FullMap(
+                  currentPosition: _currentPositon,
+                )));
+  }
 
   _getCurrentLocation() {
     Geolocator.getCurrentPosition(
@@ -31,7 +41,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
         .then((Position position) {
       setState(() {
         _currentPositon = position;
+        _locationLoaded = true;
+        // print("Getting Location:");
+        // print(_currentPositon);
       });
+      _goToFullMap();
     }).catchError((e) {
       print(e);
     });
@@ -61,10 +75,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   size: 30,
                   color: textColor,
                 ),
-                onPressed: () {
-                  print(_currentPositon);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => FullMap()));
+                onPressed: () async {
+                  _getCurrentLocation();
                 }),
             IconButton(
                 icon: Icon(
