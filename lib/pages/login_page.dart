@@ -141,6 +141,7 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
     dynamic result = await _auth.signInWithEmailAndPassword(email, password);
+    // Navigator.pop(context);
     if (result == null) {
       setState(() {
         errorString = 'Oops! Could not Sign In with these credentials';

@@ -22,7 +22,7 @@ class _CommentCardState extends State<CommentCard> {
   String _userProfileImage =
       'https://firebasestorage.googleapis.com/v0/b/callout-314015.appspot.com/o/nav_prof.png?alt=media&token=88ad1e8b-9dfe-459e-84b9-9591c862ea4d';
   String _userName = 'User';
-  String _commentedAt = '4h'; //Funky maths to calculate
+  String _commentedAt = '4h';
   String _userLocation = 'Location';
   String _commentDesc = 'Comment';
 
@@ -79,7 +79,7 @@ class _CommentCardState extends State<CommentCard> {
           }
 
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(4.0),
             child: Container(
               width: SizeConfig.screenWidth * 0.8,
               height: SizeConfig.screenHeight * 0.15,

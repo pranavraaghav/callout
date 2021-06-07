@@ -224,7 +224,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget buildDisplayNameTextFormField(TextEditingController controller) {
     return TextFormField(
-      inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ ]'))],
       maxLines: 1,
       controller: controller,
       onChanged: (value) {

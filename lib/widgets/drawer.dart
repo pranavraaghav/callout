@@ -84,10 +84,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       child: TextButton(
                         onPressed: () async {
                           await _auth.signOut();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginPage()));
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => LoginPage()));
                         },
                         child: Text('LOGOUT',
                             style: buildRobotoDrawerTextStyle(

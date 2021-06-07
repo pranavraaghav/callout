@@ -219,8 +219,7 @@ class _MainPageState extends State<MainPage> {
                   children: [
                     _buildChip('New', 1, DatabaseService().posts),
                     _buildChip('Trending', 2, DatabaseService().postsByStars),
-                    _buildChip(
-                        'Following', 3, DatabaseService().postsByLocation)
+                    _buildChip('Location', 3, DatabaseService().postsByLocation)
                   ],
                 ),
                 PostCardList(),

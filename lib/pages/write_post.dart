@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:mime/mime.dart';
 
 import 'package:provider/provider.dart';
 
@@ -39,6 +40,7 @@ class _WritePostState extends State<WritePost> {
 
   //For the image picker
   File _image;
+  File _video;
   final imagePicker = ImagePicker();
 
   Future getImage() async {
@@ -49,6 +51,19 @@ class _WritePostState extends State<WritePost> {
         _image = File(pickedFile.path);
       } else {
         print('No image selected');
+      }
+    });
+    print(lookupMimeType(_image.path));
+  }
+
+  Future getVideo() async {
+    final pickedFile = await imagePicker.getVideo(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _video = File(pickedFile.path);
+      } else {
+        print('No Video selected');
       }
     });
   }
@@ -70,9 +85,7 @@ class _WritePostState extends State<WritePost> {
   Widget build(BuildContext context) {
     final user = Provider.of<CalloutUser>(context);
     uid = user.uid;
-    authorName = user.displayName;
-    print("AuthorName:");
-    print(authorName);
+
     //Imports the responsive sizes of whatever screen
     SizeConfig().init(context);
 
@@ -161,8 +174,10 @@ class _WritePostState extends State<WritePost> {
                                 color: neutral,
                               ),
                               IconButton(
-                                icon: Icon(Icons.subject_outlined),
-                                onPressed: () {},
+                                icon: Icon(Icons.video_call),
+                                onPressed: () {
+                                  getVideo();
+                                },
                                 iconSize: 30,
                                 color: neutral,
                               )
@@ -181,7 +196,20 @@ class _WritePostState extends State<WritePost> {
                             alignment: Alignment.center,
                             child: _image == null
                                 ? Text('No Image Selected')
-                                : Image.file(_image))
+                                : Image.file(_image)),
+                        SizedBox(
+                          height: SizeConfig.screenHeight * 0.01,
+                        ),
+                        //   Container(
+                        //       decoration: BoxDecoration(
+                        //           border: Border.all(color: neutral),
+                        //           borderRadius:
+                        //               BorderRadius.all(Radius.circular(16))),
+                        //       padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        //       alignment: Alignment.center,
+                        //       child: _video == null
+                        //           ? Text('No Video Selected')
+                        //           : Text(_video.path))
                       ],
                     ),
                   ),
