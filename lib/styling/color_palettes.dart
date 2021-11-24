@@ -10,7 +10,6 @@ Color whiteTint = Color(0xffFDFEFF);
 Color cardGray = Color(0xff8E98A4);
 Color textColor = Color(0xff313A46);
 Color accentYellow = Color(0xffFFD700);
-//
 
 Color snow = Color(0xffFCF7F8);
 Color lightGray = Color(0xffCED3DC);
@@ -22,6 +21,10 @@ Color sixtyPercOrange = Color(0x96FC8400);
 Color blackCoral = Color(0xff5B616A);
 
 Color loginYellow = Color(0xFFFFD700);
+
+// nav added these from Figma, names are up for debate
+Color neutralGrey = Color(0xFF8E98A4);
+Color textColor = Color(0xFF313A46);
 
 List<Color> calloutBlue = [
   Color(0xff2E86FB),
