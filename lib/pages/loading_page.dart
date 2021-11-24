@@ -10,10 +10,10 @@ class LoadingPage extends StatefulWidget {
 
 class _LoadingPageState extends State<LoadingPage> {
   @override
-  void initState() {
-    super.initState();
-    init();
-  }
+  // void initState() {
+  //   super.initState();
+  //   // init();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -22,16 +22,19 @@ class _LoadingPageState extends State<LoadingPage> {
           gradient: verticalGradient(calloutBlue),
         ),
         child: Scaffold(
-          backgroundColor: Colors.transparent,
-        body: Center(
-          child: Image.asset('assets/images/logo.png', scale: 2,),
-        )));
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: Image.asset(
+                'assets/images/logo.png',
+                scale: 0.5,
+              ),
+            )));
   }
 
-  void init() async {
-    // Wait 3 seconds
-    await new Future.delayed(const Duration(seconds: 3));
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => LoginPage()));
-  }
+  // void init() async {
+  //   // Wait 3 seconds
+  //   await new Future.delayed(const Duration(seconds: 3));
+  //   Navigator.pushReplacement(
+  //       context, MaterialPageRoute(builder: (context) => LoginPage()));
+  // }
 }

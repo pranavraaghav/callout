@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
-// TODO
-// Add colors from figma
+//Used in Home Page
+Color mainBG = Color(0xffEAF0F8);
+Color neutral = Color(0xff8E98A4);
+Color primary = Color(0xff1A6BD6);
+Color active = Color(0xff134B96);
+Color hover = Color(0xff195FBB);
+Color whiteTint = Color(0xffFDFEFF);
+Color cardGray = Color(0xff8E98A4);
+Color textColor = Color(0xff313A46);
+Color accentYellow = Color(0xffFFD700);
 
 Color snow = Color(0xffFCF7F8);
 Color lightGray = Color(0xffCED3DC);
